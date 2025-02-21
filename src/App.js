@@ -1,34 +1,32 @@
-import React, { createContext, useState } from 'react';
-import ProductList from './components/ProductList';
+// File: src/App.js
+import React, { useContext } from 'react';
+import { LanguageProvider } from './context/LanguageContext';
+import { ThemeProvider, ThemeContext } from './context/ThemeContext';
 import ProductSearch from './components/ProductSearch';
-import ThemeToggle from './components/ThemeToggle';
+import ProductList from './components/ProductList';
 
-// TODO: Exercice 2.1 - Créer le LanguageContext
+const ThemeToggleButton = () => {
+    const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
 
-export const ThemeContext = createContext();
-
-const App = () => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
-  // TODO: Exercice 2.2 - Ajouter l'état pour la langue
-
-  return (
-    <ThemeContext.Provider value={{ isDarkTheme, setIsDarkTheme }}>
-      {/* TODO: Exercice 2.1 - Wrapper avec LanguageContext.Provider */}
-      <div className={`container ${isDarkTheme ? 'bg-dark text-light' : 'bg-light'}`}>
-        <header className="my-4">
-          <h1 className="text-center">Catalogue de Produits</h1>
-          <div className="d-flex justify-content-end gap-2">
-            <ThemeToggle />
-            {/* TODO: Exercice 2.2 - Ajouter le sélecteur de langue */}
-          </div>
-        </header>
-        <main>
-          <ProductSearch />
-          <ProductList />
-        </main>
-      </div>
-    </ThemeContext.Provider>
-  );
+    return (
+        <button className="btn btn-outline-primary my-3" onClick={toggleTheme}>
+            {isDarkTheme ? "Mode Clair" : "Mode Sombre"}
+        </button>
+    );
 };
 
-export default App
+const App = () => {
+    return (
+        <LanguageProvider>
+            <ThemeProvider>
+                <div className="container">
+                    <ThemeToggleButton />
+                    <ProductSearch />
+                    <ProductList />
+                </div>
+            </ThemeProvider>
+        </LanguageProvider>
+    );
+};
+
+export default App;
